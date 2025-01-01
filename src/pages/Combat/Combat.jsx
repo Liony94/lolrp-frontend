@@ -31,6 +31,7 @@ const Combat = () => {
       companion: {
         name: "Loup de Demacia",
         type: "Loup",
+        image: "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Warwick_0.jpg"
       }
     },
     {
