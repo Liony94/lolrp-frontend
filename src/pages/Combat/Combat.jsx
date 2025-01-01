@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Combat.styles.css';
 
 const Combat = () => {
@@ -12,6 +12,12 @@ const Combat = () => {
   const [companionAnimation, setCompanionAnimation] = useState('');
   const [specialEffect, setSpecialEffect] = useState(false);
   const [shieldEffect, setShieldEffect] = useState(false);
+  const [playerHealth, setPlayerHealth] = useState(1000);
+  const [opponentHealth, setOpponentHealth] = useState(1000);
+  const [isAutoFighting, setIsAutoFighting] = useState(false);
+  const [currentTurn, setCurrentTurn] = useState('player'); // 'player' ou 'opponent'
+  const [battleLog, setBattleLog] = useState([]);
+  const battleLogRef = useRef(null);
 
   // Données mockées pour les adversaires potentiels
   const mockOpponents = [
@@ -75,6 +81,10 @@ const Combat = () => {
 
   const startFight = () => {
     setIsFighting(true);
+    setPlayerHealth(1000);
+    setOpponentHealth(1000);
+    setBattleLog([]);
+    // On ne démarre pas le combat automatiquement, on attend que le joueur clique sur "Commencer le combat"
   };
 
   const handleAttack = () => {
@@ -133,6 +143,100 @@ const Combat = () => {
       setShowDamage(false);
     }, 800);
   };
+
+  const calculateDamage = (attacker, isSpecial = false) => {
+    const baseDamage = attacker === 'player' ? mockPlayerStats.attaque : mockOpponentStats.attaque;
+    const isCritical = Math.random() < (attacker === 'player' ? mockPlayerStats.critique : mockOpponentStats.critique) / 100;
+    const damage = isSpecial ? baseDamage * 1.5 : baseDamage;
+    return {
+      damage: Math.round(isCritical ? damage * 1.5 : damage),
+      isCritical
+    };
+  };
+
+  const performAttack = (attacker) => {
+    const { damage, isCritical } = calculateDamage(attacker);
+    const isSpecialAttack = Math.random() < 0.2; // 20% de chance d'attaque spéciale
+    const isCompanionAttack = Math.random() < 0.15; // 15% de chance d'attaque du compagnon
+
+    if (attacker === 'player') {
+      setPlayerAnimation(isSpecialAttack ? 'special' : 'attacking');
+      setIsArenaShaking(true);
+      if (isCompanionAttack) {
+        setCompanionAnimation('attacking');
+      }
+      setTimeout(() => {
+        setOpponentAnimation('taking-damage');
+        setShowDamage(true);
+        setShowCriticalHit(isCritical);
+        setOpponentHealth(prev => Math.max(0, prev - damage));
+        setBattleLog(prev => [...prev, `Vous infligez ${damage} dégâts${isCritical ? ' critiques' : ''} !`]);
+      }, 300);
+    } else {
+      setOpponentAnimation(isSpecialAttack ? 'special' : 'attacking');
+      setTimeout(() => {
+        setPlayerAnimation('taking-damage');
+        setShowDamage(true);
+        setShowCriticalHit(isCritical);
+        setPlayerHealth(prev => Math.max(0, prev - damage));
+        setBattleLog(prev => [...prev, `L'adversaire inflige ${damage} dégâts${isCritical ? ' critiques' : ''} !`]);
+      }, 300);
+    }
+
+    setTimeout(() => {
+      resetAnimations();
+      if (playerHealth <= 0 || opponentHealth <= 0) {
+        endBattle();
+      } else {
+        setCurrentTurn(attacker === 'player' ? 'opponent' : 'player');
+      }
+    }, 1000);
+  };
+
+  const resetAnimations = () => {
+    setPlayerAnimation('');
+    setOpponentAnimation('');
+    setIsArenaShaking(false);
+    setShowDamage(false);
+    setShowCriticalHit(false);
+    setCompanionAnimation('running');
+  };
+
+  const startAutoBattle = () => {
+    setIsAutoFighting(true);
+    setBattleLog(['Le combat commence !']);
+    // On commence avec le joueur
+    setCurrentTurn('player');
+  };
+
+  const endBattle = () => {
+    setIsAutoFighting(false);
+    const winner = playerHealth <= 0 ? 'opponent' : 'player';
+    setBattleLog(prev => [...prev, `Combat terminé ! ${winner === 'player' ? 'Vous avez gagné !' : 'Vous avez perdu !'}`]);
+  };
+
+  // Fonction pour faire défiler vers le bas
+  const scrollToBottom = () => {
+    if (battleLogRef.current) {
+      battleLogRef.current.scrollTop = battleLogRef.current.scrollHeight;
+    }
+  };
+
+  // Utilisez useEffect pour détecter les changements dans battleLog
+  useEffect(() => {
+    scrollToBottom();
+  }, [battleLog]); // Se déclenche à chaque fois que battleLog change
+
+  useEffect(() => {
+    if (isAutoFighting && playerHealth > 0 && opponentHealth > 0) {
+      const timer = setTimeout(() => {
+        performAttack(currentTurn);
+      }, 1500);
+      return () => clearTimeout(timer);
+    } else if (isAutoFighting && (playerHealth <= 0 || opponentHealth <= 0)) {
+      endBattle();
+    }
+  }, [isAutoFighting, currentTurn, playerHealth, opponentHealth]);
 
   return (
     <div className="combat-container">
@@ -241,25 +345,17 @@ const Combat = () => {
             <div className="arena-center">
               <div className="versus-badge">VS</div>
               <div className="battle-actions">
-                <button className="action-button attack" onClick={handleAttack}>
-                  <span className="action-icon">⚔️</span>
-                  Attaque
-                </button>
-                <button className="action-button defend" onClick={handleDefend}>
-                  <span className="action-icon">🛡️</span>
-                  Défense
-                </button>
-                <button className="action-button special" onClick={handleSpecial}>
-                  <span className="action-icon">✨</span>
-                  Spécial
-                </button>
-                <button 
-                  className="action-button companion-action" 
-                  onClick={handleCompanionAttack}
-                >
-                  <span className="action-icon">🐺</span>
-                  Compagnon
-                </button>
+                {!isAutoFighting ? (
+                  <button 
+                    className="action-button start-battle"
+                    onClick={startAutoBattle}
+                  >
+                    <span className="action-icon">⚔️</span>
+                    Commencer le combat
+                  </button>
+                ) : (
+                  <div className="battle-status">Combat en cours...</div>
+                )}
               </div>
             </div>
 
@@ -318,6 +414,26 @@ const Combat = () => {
                 )}
               </div>
             </div>
+          </div>
+          <div className="health-bar">
+            <div 
+              className={`health-fill ${showDamage ? 'damage' : ''}`} 
+              style={{width: `${playerHealth/10}%`}}
+            >
+              <div className="health-info">
+                {playerHealth} / 1000
+              </div>
+            </div>
+          </div>
+          <div 
+            className="battle-log"
+            ref={battleLogRef}
+          >
+            {battleLog.map((log, index) => (
+              <div key={index} className="battle-log-entry">
+                {log}
+              </div>
+            ))}
           </div>
         </div>
       )}

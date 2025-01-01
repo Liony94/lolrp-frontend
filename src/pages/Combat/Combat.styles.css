@@ -1,22 +1,32 @@
 .combat-container {
   max-width: 100%;
+  min-height: calc(100vh - 80px);
   margin: 0;
-  padding: 0;
+  padding: 2rem;
+  position: relative;
 }
 
 /* Section sélection d'adversaire */
+.opponent-selection {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
 .opponent-selection h2 {
   text-align: center;
   color: var(--color-accent);
   font-size: 2.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .opponents-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  gap: 3rem;
+  margin-bottom: 4rem;
+  padding: 1rem;
 }
 
 .opponent-card {
@@ -28,6 +38,10 @@
   border: 2px solid transparent;
   position: relative;
   overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 400px;
 }
 
 .opponent-card:hover {
@@ -125,6 +139,10 @@
 
 /* Arena de combat */
 .battle-arena {
+  min-height: calc(100vh - 80px);
+  margin-top: -2rem;
+  margin-left: -2rem;
+  margin-right: -2rem;
   height: 100vh;
   width: 100%;
   background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)),
@@ -282,7 +300,7 @@
     #1a9837
   );
   position: relative;
-  transition: width 0.3s ease-out;
+  transition: width 0.5s ease-out;
 }
 
 .health-fill::before {
@@ -370,11 +388,13 @@
 .arena-center {
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
+  top: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2rem;
+  z-index: 10;
 }
 
 .versus-badge {
@@ -386,13 +406,14 @@
 }
 
 .battle-actions {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: rgba(0, 0, 0, 0.8);
-  padding: 1rem;
+  padding: 1.5rem;
   border-radius: 12px;
   border: 1px solid var(--color-primary);
+  min-width: 300px;
 }
 
 .action-button {
@@ -950,4 +971,101 @@
   0% { transform: scale(1); }
   50% { transform: scale(1.2); color: #e74c3c; }
   100% { transform: scale(1); }
+}
+
+/* Ajoutez ces styles */
+.battle-log {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  max-height: 120px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid var(--color-primary);
+  border-radius: 8px;
+  padding: 1rem;
+  color: var(--color-text);
+  z-index: 100;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  scroll-behavior: smooth;
+}
+
+.battle-log-entry {
+  margin: 0.5rem 0;
+  text-align: center;
+  animation: logEntry 0.3s ease-out;
+  padding: 0.3rem 0;
+}
+
+.battle-log-entry:last-child {
+  border-bottom: none;
+  scroll-margin-bottom: 0;
+}
+
+.battle-status {
+  background: rgba(0, 0, 0, 0.8);
+  padding: 1.2rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-primary);
+  min-width: 200px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(147, 115, 65, 0.2);
+  width: 100%;
+  padding: 1.2rem;
+  font-size: 1.2rem;
+  color: var(--color-accent);
+  text-shadow: 0 0 10px rgba(147, 115, 65, 0.5);
+}
+
+@keyframes logEntry {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modification de la transition de la barre de vie */
+.health-fill {
+  transition: width 0.5s ease-out;
+}
+
+.action-button.start-battle {
+  background: var(--gradient-gold);
+  color: var(--color-background);
+  font-size: 1.2rem;
+  padding: 1.2rem 2.5rem;
+  width: fit-content;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  border: none;
+  box-shadow: 0 0 15px rgba(147, 115, 65, 0.3);
+}
+
+.action-button.start-battle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(147, 115, 65, 0.5);
+}
+
+/* Style pour le scroll du journal de combat */
+.battle-log::-webkit-scrollbar {
+  width: 8px;
+}
+
+.battle-log::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+.battle-log::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 4px;
 } 
