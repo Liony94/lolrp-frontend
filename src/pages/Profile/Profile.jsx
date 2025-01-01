@@ -5,6 +5,7 @@ import './Profile.styles.css';
 const Profile = () => {
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
+  const [availablePoints, setAvailablePoints] = useState(5); // Points disponibles à dépenser
 
   const mockStats = {
     vie: 580,
@@ -12,7 +13,7 @@ const Profile = () => {
     attaque: 68,
     puissance: 45,
     mobilite: 30,
-    difficulte: 2,
+    endurance: 55,
   };
 
   const mockInfo = {
@@ -21,7 +22,15 @@ const Profile = () => {
     region: "Demacia",
     titre: "La Lame Vertueuse",
     niveau: 28,
-    experience: 75, // pourcentage jusqu'au prochain niveau
+    experience: 75,
+  };
+
+  const handleStatIncrease = (statName) => {
+    if (availablePoints > 0) {
+      // Simulation de l'augmentation de stat
+      // Dans une vraie implémentation, cela serait géré par le backend
+      setAvailablePoints(prev => prev - 1);
+    }
   };
 
   return (
@@ -47,59 +56,58 @@ const Profile = () => {
             <span className="badge role">{mockInfo.role}</span>
             <span className="badge grade">{mockInfo.grade}</span>
           </div>
+          <div className="experience-bar-container">
+            <div className="experience-bar">
+              <div 
+                className="experience-fill" 
+                style={{width: `${mockInfo.experience}%`}}
+              />
+              <span className="experience-text">
+                {mockInfo.experience}% jusqu'au niveau {mockInfo.niveau + 1}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 
       <div className="profile-content">
         <div className="profile-section stats-section">
-          <h2>Statistiques de Combat</h2>
+          <div className="stats-header">
+            <h2>Statistiques de Combat</h2>
+            <div className="available-points">
+              Points disponibles: <span className="points-value">{availablePoints}</span>
+            </div>
+          </div>
           <div className="stats-grid">
-            <div className="stat-item">
-              <div className="stat-label">Vie</div>
-              <div className="stat-bar">
-                <div className="stat-fill" style={{width: `${(mockStats.vie/1000)*100}%`}}></div>
-                <span className="stat-value">{mockStats.vie}</span>
+            {Object.entries(mockStats).map(([statName, value]) => (
+              <div className="stat-item" key={statName}>
+                <div className="stat-header">
+                  <div className="stat-label">
+                    {statName.charAt(0).toUpperCase() + statName.slice(1)}
+                  </div>
+                  {availablePoints > 0 && (
+                    <button 
+                      className="increase-stat-btn"
+                      onClick={() => handleStatIncrease(statName)}
+                      title="Augmenter la statistique"
+                    >
+                      +
+                    </button>
+                  )}
+                </div>
+                <div className="stat-bar">
+                  <div 
+                    className="stat-fill" 
+                    style={{
+                      width: statName === 'vie' 
+                        ? `${(value/1000)*100}%` 
+                        : `${value}%`
+                    }}
+                  />
+                  <span className="stat-value">{value}</span>
+                </div>
               </div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-label">Défense</div>
-              <div className="stat-bar">
-                <div className="stat-fill" style={{width: `${mockStats.defense}%`}}></div>
-                <span className="stat-value">{mockStats.defense}</span>
-              </div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-label">Attaque</div>
-              <div className="stat-bar">
-                <div className="stat-fill" style={{width: `${mockStats.attaque}%`}}></div>
-                <span className="stat-value">{mockStats.attaque}</span>
-              </div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-label">Puissance</div>
-              <div className="stat-bar">
-                <div className="stat-fill" style={{width: `${mockStats.puissance}%`}}></div>
-                <span className="stat-value">{mockStats.puissance}</span>
-              </div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-label">Mobilité</div>
-              <div className="stat-bar">
-                <div className="stat-fill" style={{width: `${mockStats.mobilite}%`}}></div>
-                <span className="stat-value">{mockStats.mobilite}</span>
-              </div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-label">Difficulté</div>
-              <div className="difficulty-rating">
-                {[...Array(3)].map((_, index) => (
-                  <span 
-                    key={index} 
-                    className={`difficulty-star ${index < mockStats.difficulte ? 'active' : ''}`}
-                  >★</span>
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 

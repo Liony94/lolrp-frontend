@@ -31,6 +31,10 @@ const Navbar = () => {
               )}
             </div>
             <NavLink to="/profile">Profil</NavLink>
+            <NavLink to="/combat" className="combat-link">
+              <span className="combat-icon">⚔️</span>
+              Combat
+            </NavLink>
             <NavLink to="/regions">Régions</NavLink>
             <NavLink to="/stories">Histoires</NavLink>
             <button onClick={handleLogout} className="logout-button">

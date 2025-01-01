@@ -21,13 +21,26 @@
 }
 
 .navbar-links a {
-  color: var(--color-text);
+  position: relative;
   text-decoration: none;
-  transition: color 0.2s;
+  color: var(--color-text);
+  font-weight: 500;
+  transition: color 0.3s ease;
 }
 
-.navbar-links a:hover {
-  color: var(--color-accent);
+.navbar-links a:not(.combat-link)::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--gradient-gold);
+  transition: width 0.3s ease;
+}
+
+.navbar-links a:not(.combat-link):hover::after {
+  width: 100%;
 }
 
 .user-info {
@@ -65,4 +78,43 @@
 .active {
   color: var(--color-accent) !important;
   font-weight: bold;
+}
+
+.combat-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--gradient-dark);
+  border: 1px solid var(--color-primary);
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.combat-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(147, 115, 65, 0.3);
+  border-color: var(--color-accent);
+}
+
+.combat-link.active {
+  background: var(--gradient-gold);
+  color: var(--color-background);
+}
+
+.combat-icon {
+  font-size: 1.2rem;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 } 
