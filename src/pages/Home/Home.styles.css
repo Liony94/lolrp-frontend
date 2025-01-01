@@ -1,0 +1,505 @@
+.home-container {
+  min-height: 100vh;
+  background: linear-gradient(var(--color-overlay), var(--color-overlay)),
+              url('https://images.contentstack.io/v3/assets/blt731acb42bb3d1659/blt9a2715ced150cb68/5e8246164bf8ef0b3bb1b918/00_Runeterra_Map.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.hero-section {
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+  z-index: 0;
+}
+
+.hero-background.transitioning {
+  opacity: 0;
+}
+
+/* Ajout d'un effet de zoom léger */
+.hero-background {
+  animation: slowZoom 20s infinite alternate;
+}
+
+@keyframes slowZoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
+  }
+}
+
+/* Ajout d'indicateurs de navigation */
+.slider-indicators {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 1rem;
+  z-index: 3;
+}
+
+.slider-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-text);
+  opacity: 0.5;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.slider-indicator.active {
+  opacity: 1;
+  background: var(--color-accent);
+  transform: scale(1.2);
+}
+
+/* Ajustement de l'overlay pour un meilleur contraste tout en gardant la visibilité */
+.hero-background::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  z-index: 1;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  z-index: 1;
+}
+
+.hero-section h1 {
+  font-size: 4.5rem;
+  margin-bottom: 1.5rem;
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+  position: relative;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.hero-section p {
+  font-size: 1.8rem;
+  color: var(--color-text);
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto 2rem;
+  text-align: center;
+  line-height: 1.4;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+.features-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+  padding: 4rem 2rem;
+  background: var(--color-overlay);
+  position: relative;
+}
+
+.feature-card {
+  background: var(--gradient-dark);
+  border: 1px solid var(--color-primary);
+  padding: 2.5rem;
+  border-radius: 12px;
+  color: var(--color-text);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  transform: translateY(0);
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-gold);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(147, 115, 65, 0.2);
+}
+
+.feature-card:hover::before {
+  transform: scaleX(1);
+}
+
+.feature-card h3 {
+  font-size: 1.8rem;
+  color: var(--color-accent);
+  margin-bottom: 1.5rem;
+}
+
+.feature-card p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.cta-buttons {
+  margin-top: 2rem;
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  animation: fadeIn 0.5s ease-out 0.3s backwards;
+  width: 100%;
+  max-width: 600px;
+}
+
+.cta-primary, .cta-secondary {
+  padding: 1.2rem 2.5rem;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  min-width: 200px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+.cta-primary {
+  background: var(--gradient-gold);
+  border: none;
+  color: var(--color-background);
+}
+
+.cta-secondary {
+  background: transparent;
+  border: 2px solid var(--color-primary);
+  color: var(--color-text);
+}
+
+.cta-primary:hover, .cta-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(147, 115, 65, 0.3);
+}
+
+.regions-preview {
+  padding: 4rem 2rem;
+  background: var(--gradient-dark);
+}
+
+.regions-preview h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.regions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.region-card {
+  position: relative;
+  height: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transform: scale(1);
+}
+
+.region-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent, var(--color-background));
+}
+
+.region-card h3 {
+  position: absolute;
+  bottom: 60px;
+  left: 20px;
+  color: var(--color-accent);
+  font-size: 1.8rem;
+}
+
+.region-card p {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  color: var(--color-text);
+}
+
+.region-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 50%, var(--color-background));
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.region-card:hover::after {
+  opacity: 0.4;
+}
+
+.demacia {
+  background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Garen_0.jpg') center/cover;
+}
+
+.noxus {
+  background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Darius_0.jpg') center/cover;
+}
+
+.ionia {
+  background: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Irelia_0.jpg') center/cover;
+}
+
+.feature-list {
+  list-style: none;
+  margin-top: 1rem;
+  text-align: left;
+  padding-left: 1rem;
+}
+
+.feature-list li {
+  margin: 0.5rem 0;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.feature-list li::before {
+  content: '•';
+  color: var(--color-accent);
+  position: absolute;
+  left: 0;
+}
+
+.latest-stories {
+  padding: 4rem 2rem;
+  background: var(--color-overlay);
+}
+
+.latest-stories h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: var(--color-accent);
+}
+
+.stories-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.story-card {
+  background: var(--gradient-dark);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transform: translateY(0);
+}
+
+.story-image {
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1);
+  transition: transform 0.3s ease;
+}
+
+.story-content {
+  padding: 1.5rem;
+}
+
+.story-content h4 {
+  color: var(--color-accent);
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.story-author {
+  display: block;
+  margin-top: 1rem;
+  color: var(--color-primary);
+  font-style: italic;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  animation: fadeIn 0.5s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.hero-region-indicator {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  background: var(--gradient-gold);
+  padding: 0.8rem 1.8rem;
+  border-radius: 8px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--color-background);
+  opacity: 0.95;
+  transform: translateY(0);
+  transition: all 0.3s ease;
+  z-index: 2;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.hero-region-indicator:hover {
+  transform: translateY(-5px);
+  opacity: 1;
+}
+
+.feature-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover .feature-icon {
+  transform: scale(1.1);
+}
+
+.feature-icon.character {
+  background-image: url('https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-profiles/global/default/profile_icon.png');
+}
+
+.feature-icon.story {
+  background-image: url('https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-missions/global/default/missions_icon.png');
+}
+
+.feature-icon.community {
+  background-image: url('https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/clash-logo-small.png');
+}
+
+.story-image.demacia-story {
+  background-image: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/JarvanIV_0.jpg');
+}
+
+.story-image.noxus-story {
+  background-image: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Swain_0.jpg');
+}
+
+.cta-primary::before, .cta-secondary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: 0.5s;
+}
+
+.cta-primary:hover::before, .cta-secondary:hover::before {
+  left: 100%;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.story-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.story-image {
+  transform: scale(1);
+  transition: transform 0.3s ease;
+}
+
+.story-card:hover .story-image {
+  transform: scale(1.05);
+} 
