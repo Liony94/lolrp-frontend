@@ -1,37 +1,86 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import api from '../../services/api';
 import './Profile.styles.css';
 
 const Profile = () => {
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
-  const [availablePoints, setAvailablePoints] = useState(5); // Points disponibles à dépenser
+  const [availablePoints, setAvailablePoints] = useState(5);
+  const [userStats, setUserStats] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const mockStats = {
-    vie: 580,
-    defense: 35,
-    attaque: 68,
-    puissance: 45,
-    mobilite: 30,
-    endurance: 55,
-  };
+  useEffect(() => {
+    const fetchUserStats = async () => {
+      try {
+        setIsLoading(true);
+        const response = await api.get('/user/me');
+        // Restructurer les données pour correspondre à notre affichage
 
-  const mockInfo = {
-    role: "Combattant",
-    grade: "Capitaine",
-    region: "Demacia",
-    titre: "La Lame Vertueuse",
-    niveau: 28,
-    experience: 75,
-  };
+        const userData = response.data;
+        const stats = {
+          vie: userData.vie,
+          defense: userData.defense,
+          attaque: userData.attaque,
+          puissance: userData.puissance,
+          esquive: userData.esquive,
+          endurance: userData.endurance
+        };
+        
+        setUserStats({
+          stats,
+          region: userData.region?.name || "Région inconnue",
+          niveau: Math.floor((userData.attaque + userData.defense + userData.puissance + userData.esquive + userData.endurance) / 50),
+          experience: Math.floor(Math.random() * 100),
+          description: userData.description,
+          profileImage: userData.profileImage
+        });
+        
+      } catch (err) {
+        console.error('Erreur lors de la récupération des stats:', err);
+        setError('Impossible de charger les statistiques');
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const handleStatIncrease = (statName) => {
+    fetchUserStats();
+  }, []);
+
+  const handleStatIncrease = async (statName) => {
     if (availablePoints > 0) {
-      // Simulation de l'augmentation de stat
-      // Dans une vraie implémentation, cela serait géré par le backend
-      setAvailablePoints(prev => prev - 1);
+      try {
+        const updateData = {
+          [statName]: userStats.stats[statName] + 1
+        };
+
+        await api.patch('/user/update-stats', updateData);
+
+        // Mise à jour locale
+        setUserStats(prev => ({
+          ...prev,
+          stats: {
+            ...prev.stats,
+            [statName]: prev.stats[statName] + 1
+          }
+        }));
+        setAvailablePoints(prev => prev - 1);
+
+      } catch (err) {
+        console.error('Erreur lors de la mise à jour des stats:', err);
+        setError('Impossible de mettre à jour les statistiques');
+      }
     }
   };
+
+  if (isLoading) {
+    return <div className="loading">Chargement des statistiques...</div>;
+  }
+
+  if (error) {
+    return <div className="error">{error}</div>;
+  }
 
   return (
     <div className="profile-container">
@@ -44,26 +93,26 @@ const Profile = () => {
               className="profile-avatar"
             />
             <div className="profile-level">
-              <span>{mockInfo.niveau}</span>
+              <span>{userStats?.niveau || "Niveau"}</span>
             </div>
           </div>
         </div>
         <div className="profile-info-header">
           <h1>{user?.username || "Invocateur"}</h1>
-          <span className="profile-title">{mockInfo.titre}</span>
+          <span className="profile-title">{userStats?.titre || "Titre"}</span>
           <div className="profile-badges">
-            <span className="badge region">{mockInfo.region}</span>
-            <span className="badge role">{mockInfo.role}</span>
-            <span className="badge grade">{mockInfo.grade}</span>
+            <span className="badge region">{userStats?.region || "Région"}</span>
+            <span className="badge role">{userStats?.role || "Rôle"}</span>
+            <span className="badge grade">{userStats?.grade || "Grade"}</span>
           </div>
           <div className="experience-bar-container">
             <div className="experience-bar">
               <div 
                 className="experience-fill" 
-                style={{width: `${mockInfo.experience}%`}}
+                style={{width: `${userStats?.experience}%`}}
               />
               <span className="experience-text">
-                {mockInfo.experience}% jusqu'au niveau {mockInfo.niveau + 1}
+                {userStats?.experience}% jusqu'au niveau {userStats?.niveau + 1}
               </span>
             </div>
           </div>
@@ -78,11 +127,11 @@ const Profile = () => {
               Points disponibles: <span className="points-value">{availablePoints}</span>
             </div>
           </div>
-          <div className="stats-grid">
-            {Object.entries(mockStats).map(([statName, value]) => (
-              <div className="stat-item" key={statName}>
-                <div className="stat-header">
-                  <div className="stat-label">
+          <div className="profile-stats-grid">
+            {userStats && Object.entries(userStats.stats).map(([statName, value]) => (
+              <div className="profile-stat-item" key={statName}>
+                <div className="profile-stat-header">
+                  <div className="profile-stat-label">
                     {statName.charAt(0).toUpperCase() + statName.slice(1)}
                   </div>
                   {availablePoints > 0 && (
@@ -95,16 +144,16 @@ const Profile = () => {
                     </button>
                   )}
                 </div>
-                <div className="stat-bar">
+                <div className="profile-stat-bar">
                   <div 
-                    className="stat-fill" 
+                    className="profile-stat-fill" 
                     style={{
                       width: statName === 'vie' 
                         ? `${(value/1000)*100}%` 
                         : `${value}%`
                     }}
                   />
-                  <span className="stat-value">{value}</span>
+                  <span className="profile-stat-value">{value}</span>
                 </div>
               </div>
             ))}
