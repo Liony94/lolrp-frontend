@@ -40,16 +40,6 @@ const getRegions = () => {
   return api.get("/regions");
 };
 
-export const getDailyQuests = async () => {
-  const response = await axios.get("/api/quests/daily");
-  return response.data;
-};
-
-export const getLeaderboard = async () => {
-  const response = await axios.get("/api/leaderboard");
-  return response.data;
-};
-
 export const getRecentActivity = async () => {
   const response = await axios.get("/api/activity/recent");
   return response.data;

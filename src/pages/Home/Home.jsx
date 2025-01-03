@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './Home.styles.css';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
 
 const backgroundImages = [
   {
@@ -23,7 +21,6 @@ const backgroundImages = [
 ];
 
 const Home = () => {
-  const { user } = useAuth();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
@@ -42,10 +39,6 @@ const Home = () => {
 
     return () => clearInterval(interval);
   }, []);
-
-  if (user) {
-    return <Navigate to="/dashboard" replace />;
-  }
 
   return (
     <div className="home-container">
