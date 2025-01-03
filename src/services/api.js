@@ -36,4 +36,30 @@ api.interceptors.response.use(
   }
 );
 
+const getRegions = () => {
+  return api.get("/regions");
+};
+
+export const getDailyQuests = async () => {
+  const response = await axios.get("/api/quests/daily");
+  return response.data;
+};
+
+export const getLeaderboard = async () => {
+  const response = await axios.get("/api/leaderboard");
+  return response.data;
+};
+
+export const getRecentActivity = async () => {
+  const response = await axios.get("/api/activity/recent");
+  return response.data;
+};
+
+export const getUserStats = async () => {
+  const response = await axios.get("/api/user/stats");
+  return response.data;
+};
+
+export { getRegions };
+
 export default api;

@@ -16,22 +16,21 @@ const Profile = () => {
       try {
         setIsLoading(true);
         const response = await api.get('/user/me');
-        // Restructurer les données pour correspondre à notre affichage
-
         const userData = response.data;
-        const stats = {
-          vie: userData.vie,
-          defense: userData.defense,
-          attaque: userData.attaque,
-          puissance: userData.puissance,
-          esquive: userData.esquive,
-          endurance: userData.endurance
-        };
         
         setUserStats({
-          stats,
+          stats: {
+            vie: userData.vie,
+            defense: userData.defense,
+            attaque: userData.attaque,
+            puissance: userData.puissance,
+            esquive: userData.esquive,
+            criticalChance: userData.criticalChance,
+            criticalDmg: userData.criticalDmg,
+            precision: userData.precision
+          },
           region: userData.region?.name || "Région inconnue",
-          niveau: Math.floor((userData.attaque + userData.defense + userData.puissance + userData.esquive + userData.endurance) / 50),
+          niveau: Math.floor((userData.attaque + userData.defense + userData.puissance + userData.esquive) / 40),
           experience: Math.floor(Math.random() * 100),
           description: userData.description,
           profileImage: userData.profileImage
@@ -101,7 +100,7 @@ const Profile = () => {
           <h1>{user?.username || "Invocateur"}</h1>
           <span className="profile-title">{userStats?.titre || "Titre"}</span>
           <div className="profile-badges">
-            <span className="badge region">{userStats?.region || "Région"}</span>
+            <span className="badge region">{userStats?.region}</span>
             <span className="badge role">{userStats?.role || "Rôle"}</span>
             <span className="badge grade">{userStats?.grade || "Grade"}</span>
           </div>
@@ -132,7 +131,10 @@ const Profile = () => {
               <div className="profile-stat-item" key={statName}>
                 <div className="profile-stat-header">
                   <div className="profile-stat-label">
-                    {statName.charAt(0).toUpperCase() + statName.slice(1)}
+                    {statName === 'criticalChance' ? 'Chance Critique' :
+                     statName === 'criticalDmg' ? 'Dégâts Critiques' :
+                     statName === 'precision' ? 'Précision' :
+                     statName.charAt(0).toUpperCase() + statName.slice(1)}
                   </div>
                   {availablePoints > 0 && (
                     <button 
@@ -150,10 +152,12 @@ const Profile = () => {
                     style={{
                       width: statName === 'vie' 
                         ? `${(value/1000)*100}%` 
+                        : statName === 'criticalDmg'
+                        ? `${(value/200)*100}%`
                         : `${value}%`
                     }}
                   />
-                  <span className="profile-stat-value">{value}</span>
+                  <span className="profile-stat-value">{value}{statName === 'criticalChance' || statName === 'criticalDmg' || statName === 'precision' ? '%' : ''}</span>
                 </div>
               </div>
             ))}

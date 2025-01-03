@@ -247,109 +247,160 @@
 }
 
 .health-bar {
-  height: 20px;
-  background: rgba(0, 0, 0, 0.8);
-  border-radius: 3px;
-  position: relative;
-  width: 200px;
-  margin: 0 auto;
-  border: 1px solid var(--color-primary);
+  width: 100%;
+  height: 25px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  padding: 2px;
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+  position: relative;
   overflow: hidden;
-}
-
-.health-bar::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: repeating-linear-gradient(
-    90deg,
-    transparent,
-    transparent 10px,
-    rgba(0, 0, 0, 0.2) 10px,
-    rgba(0, 0, 0, 0.2) 11px
-  );
-  z-index: 1;
-}
-
-.health-bar::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 30%;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.2),
-    transparent
-  );
-  z-index: 2;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 10px;
 }
 
 .health-fill {
   height: 100%;
   background: linear-gradient(
-    to right,
-    #1a9837,
-    #2ecc71 30%,
-    #2ecc71 70%,
-    #1a9837
+    90deg,
+    #0AC8B9 0%,
+    #0A7B8C 100%
   );
+  border-radius: 12px;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-  transition: width 0.5s ease-out;
+  overflow: hidden;
 }
 
-.health-fill::before {
+/* Effet de brillance */
+.health-fill::after {
   content: '';
   position: absolute;
   top: 0;
-  right: 0;
-  bottom: 0;
+  left: -100%;
   width: 100%;
-  background: #e74c3c;
-  transition: transform 0.8s ease-out;
-  transform: translateX(100%);
-}
-
-.health-fill.damage::before {
-  transform: translateX(0);
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: shine 2s infinite;
 }
 
 .health-info {
   position: absolute;
   width: 100%;
-  text-align: center;
-  font-size: 0.8rem;
-  color: white;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-  z-index: 3;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   height: 100%;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  font-size: 0.9rem;
+  z-index: 2;
 }
 
-@keyframes healthDamage {
+/* Changement de couleur selon le pourcentage de vie */
+.health-fill[style*="width: 7"],
+.health-fill[style*="width: 6"] {
+  background: linear-gradient(
+    90deg,
+    #FFA942 0%,
+    #FF8B2C 100%
+  );
+}
+
+.health-fill[style*="width: 5"],
+.health-fill[style*="width: 4"] {
+  background: linear-gradient(
+    90deg,
+    #FF6B42 0%,
+    #FF4E2C 100%
+  );
+}
+
+.health-fill[style*="width: 3"],
+.health-fill[style*="width: 2"],
+.health-fill[style*="width: 1"],
+.health-fill[style*="width: 0"] {
+  background: linear-gradient(
+    90deg,
+    #FF4242 0%,
+    #FF2C2C 100%
+  );
+  animation: low-health 1s infinite;
+}
+
+/* Animation de dégâts */
+.health-fill.damage {
+  filter: brightness(1.5);
+  animation: damage-pulse 0.3s ease-out;
+}
+
+@keyframes damage-pulse {
   0% {
-    transform: translateX(0);
+    transform: scaleX(1);
   }
-  25% {
-    transform: translateX(-2px);
-  }
-  75% {
-    transform: translateX(2px);
+  50% {
+    transform: scaleX(0.98);
   }
   100% {
-    transform: translateX(0);
+    transform: scaleX(1);
   }
 }
 
-.health-bar.taking-damage {
-  animation: healthDamage 0.3s ease-in-out;
+/* Animation de brillance */
+@keyframes shine {
+  0% {
+    left: -100%;
+    opacity: 0.7;
+  }
+  20% {
+    left: 100%;
+    opacity: 0.7;
+  }
+  21% {
+    opacity: 0;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+/* Animation de vie faible */
+@keyframes low-health {
+  0% {
+    filter: brightness(1) saturate(1);
+  }
+  50% {
+    filter: brightness(1.4) saturate(1.2);
+  }
+  100% {
+    filter: brightness(1) saturate(1);
+  }
+}
+
+/* Animation de prise de dégâts */
+.taking-damage {
+  animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20%, 60% {
+    transform: translateX(-2px);
+  }
+  40%, 80% {
+    transform: translateX(2px);
+  }
 }
 
 .companion-container {
@@ -560,36 +611,28 @@
 /* Effets de dégâts */
 .damage-effect {
   position: absolute;
-  top: 50%;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 2.5rem;
   color: #ff4444;
+  font-size: 1.5rem;
   font-weight: bold;
-  text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
-  animation: damagePopup 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
-  z-index: 10;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  animation: damageFloat 1s ease-out forwards;
+  z-index: 1000;
 }
 
-@keyframes damagePopup {
+@keyframes damageFloat {
   0% {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.5);
-  }
-  10% {
-    opacity: 1;
-    transform: translate(-50%, -70%) scale(1.2);
+    transform: translate(-50%, -30%);
   }
   20% {
-    transform: translate(-50%, -90%) scale(1.1);
-  }
-  90% {
     opacity: 1;
-    transform: translate(-50%, -150%) scale(1);
   }
   100% {
     opacity: 0;
-    transform: translate(-50%, -170%) scale(0.8);
+    transform: translate(-50%, -100%);
   }
 }
 
@@ -979,29 +1022,56 @@
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  width: 400px;
-  max-height: 120px;
-  overflow-y: auto;
-  background: rgba(0, 0, 0, 0.9);
-  border: 1px solid var(--color-primary);
+  width: 80%;
+  max-width: 600px;
+  max-height: 150px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--color-primary);
   border-radius: 8px;
   padding: 1rem;
-  color: var(--color-text);
-  z-index: 100;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  scroll-behavior: smooth;
+  overflow-y: auto;
+  z-index: 10;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary) transparent;
+}
+
+.battle-log::-webkit-scrollbar {
+  width: 8px;
+}
+
+.battle-log::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.battle-log::-webkit-scrollbar-thumb {
+  background-color: var(--color-primary);
+  border-radius: 4px;
 }
 
 .battle-log-entry {
+  color: var(--color-text);
   margin: 0.5rem 0;
-  text-align: center;
-  animation: logEntry 0.3s ease-out;
-  padding: 0.3rem 0;
+  padding: 0.5rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  animation: logEntryAppear 0.3s ease-out forwards;
 }
 
+@keyframes logEntryAppear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Style spécial pour les messages importants */
 .battle-log-entry:last-child {
-  border-bottom: none;
-  scroll-margin-bottom: 0;
+  background: rgba(var(--color-accent-rgb), 0.2);
+  font-weight: bold;
 }
 
 .battle-status {
@@ -1068,4 +1138,377 @@
 .battle-log::-webkit-scrollbar-thumb {
   background: var(--color-primary);
   border-radius: 4px;
+}
+
+.opponent-stats {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.opponent-stats .stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.opponent-stats .stat-label {
+  font-size: 0.8rem;
+  color: var(--color-text);
+  opacity: 0.8;
+}
+
+.opponent-stats .stat-value {
+  font-weight: bold;
+  color: var(--color-accent);
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--color-accent);
+}
+
+.error {
+  text-align: center;
+  padding: 2rem;
+  color: #e74c3c;
+  background: rgba(231, 76, 60, 0.1);
+  border-radius: 8px;
+  border: 1px solid #e74c3c;
+}
+
+/* Ajoutez ces styles pour l'animation d'attaque ratée */
+.missed-attack {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 2rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  animation: missedAttack 1s ease-out forwards;
+  z-index: 1000;
+}
+
+@keyframes missedAttack {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Style pour le personnage qui rate son attaque */
+.character-container.missing {
+  animation: missAttackAnimation 0.5s ease-out;
+}
+
+@keyframes missAttackAnimation {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(10px) rotate(5deg);
+  }
+  75% {
+    transform: translateX(-10px) rotate(-5deg);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Ajoutez ces styles pour le nouveau tableau de stats */
+.combat-stats-container {
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid var(--color-primary);
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.combat-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.combat-stat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.combat-stat-row:hover {
+  background: rgba(147, 115, 65, 0.1);
+  transform: translateY(-2px);
+}
+
+.combat-stat-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.combat-stat-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.combat-stat-label {
+  font-size: 0.8rem;
+  color: var(--color-text);
+  opacity: 0.8;
+}
+
+.combat-stat-value {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--color-accent);
+}
+
+/* Ajoutez plus de spécificité pour les conteneurs de personnages */
+.battle-arena .character-container .combat-stats-container {
+  margin: 1rem auto;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.character-container {
+  position: relative;
+}
+
+.character-container.active-turn::before {
+  content: '►';
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--color-accent);
+  font-size: 24px;
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-10px);
+  }
+}
+
+/* Ajoutez cette règle pour la couleur initiale */
+.health-fill {
+  --health-color-start: #0AC8B9;
+  --health-color-end: #0A7B8C;
+}
+
+/* Modifiez les règles existantes pour qu'elles surchargent la couleur initiale */
+.health-fill[style*="width: 9"],
+.health-fill[style*="width: 8"] {
+  --health-color-start: #0AC8B9;
+  --health-color-end: #0A7B8C;
+}
+
+/* ... autres règles de couleur ... */
+
+/* Animation d'entrée dans l'arène */
+.battle-arena-enter {
+  position: relative;
+  animation: arenaEntrance 2s ease-out forwards;
+}
+
+.battle-arena::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(255, 0, 0, 0.2), transparent);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  animation: bloodMist 3s ease-out forwards;
+}
+
+.battle-arena-flash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: white;
+  animation: flashFade 2s ease-out forwards;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.versus-text {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 8rem;
+  font-weight: bold;
+  color: var(--color-accent);
+  text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+  opacity: 0;
+  animation: versusAppear 2s ease-out forwards;
+  z-index: 101;
+}
+
+@keyframes arenaEntrance {
+  0% {
+    transform: scale(1.5);
+    filter: blur(10px) brightness(0);
+  }
+  30% {
+    transform: scale(1.2);
+    filter: blur(5px) brightness(0.3);
+  }
+  100% {
+    transform: scale(1);
+    filter: blur(0) brightness(1);
+  }
+}
+
+@keyframes bloodMist {
+  0% {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+}
+
+@keyframes flashFade {
+  0% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes versusAppear {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  30% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  70% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2);
+  }
+}
+
+/* Animation des personnages */
+.player-side {
+  animation: slideFromLeft 2s ease-out forwards;
+}
+
+.opponent-side {
+  animation: slideFromRight 2s ease-out forwards;
+}
+
+@keyframes slideFromLeft {
+  0% {
+    transform: translateX(-100vw) scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: translateX(-50vw) scale(0.9);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slideFromRight {
+  0% {
+    transform: translateX(100vw) scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: translateX(50vw) scale(0.9);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Style du bouton de retour */
+.action-button.return {
+  background: var(--gradient-dark);
+  border: 2px solid var(--color-primary);
+  color: var(--color-text);
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  animation: buttonAppear 0.5s ease-out;
+}
+
+.action-button.return:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.action-button.return .action-icon {
+  margin-right: 0.5rem;
+  font-size: 1.2rem;
+}
+
+@keyframes buttonAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 } 

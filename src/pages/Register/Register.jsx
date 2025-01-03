@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import api from '../../services/api';
-import { REGIONS } from '../../constants/regions';
+import { getRegions } from '../../services/api';
 import './Register.styles.css';
 
 const Register = () => {
@@ -21,6 +20,25 @@ const Register = () => {
     region: '',
     profileImage: null
   });
+  const [regions, setRegions] = useState([]);
+  const [loadingRegions, setLoadingRegions] = useState(true);
+
+  useEffect(() => {
+    const fetchRegions = async () => {
+      try {
+        setLoadingRegions(true);
+        const response = await getRegions();
+        setRegions(response.data);
+      } catch (err) {
+        console.error('Erreur lors de la récupération des régions:', err);
+        setError('Impossible de charger les régions');
+      } finally {
+        setLoadingRegions(false);
+      }
+    };
+
+    fetchRegions();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -132,14 +150,22 @@ const Register = () => {
                   value={formData.region}
                   onChange={handleChange}
                   required
+                  disabled={loadingRegions}
                 >
-                  <option value="">Sélectionnez une région</option>
-                  {REGIONS.map(region => (
-                    <option key={region.id} value={region.id}>
+                  <option value="">
+                    {loadingRegions ? 'Chargement des régions...' : 'Sélectionnez une région'}
+                  </option>
+                  {regions.map(region => (
+                    <option key={region.id} value={region.name}>
                       {region.name}
                     </option>
                   ))}
                 </select>
+                {formData.region && (
+                  <p className="region-description">
+                    {regions.find(r => r.name === formData.region)?.description}
+                  </p>
+                )}
               </div>
 
               <div className="form-group">
