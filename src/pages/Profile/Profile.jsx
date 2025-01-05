@@ -129,32 +129,6 @@ const Profile = () => {
             <span className="badge role">{userStats?.role || "Rôle"}</span>
             <span className="badge grade">{userStats?.grade || "Grade"}</span>
           </div>
-          <div className="profile-battle-stats">
-            <div className="battle-stat">
-              <span className="stat-icon power">⚡</span>
-              <span className="stat-value">{userStats?.battlePower}</span>
-              <span className="stat-label">Battle Power</span>
-            </div>
-            <div className="battle-stat">
-              <span className="stat-icon victories">🏆</span>
-              <span className="stat-value">{userStats?.victories || 0}</span>
-              <span className="stat-label">Victoires</span>
-            </div>
-            <div className="battle-stat">
-              <span className="stat-icon defeats">💀</span>
-              <span className="stat-value">{userStats?.defeats || 0}</span>
-              <span className="stat-label">Défaites</span>
-            </div>
-            <div className="battle-stat">
-              <span className="stat-icon ratio">⚔️</span>
-              <span className="stat-value">
-                {userStats?.victories + userStats?.defeats > 0
-                  ? ((userStats?.victories / (userStats?.victories + userStats?.defeats)) * 100).toFixed(1)
-                  : 0}%
-              </span>
-              <span className="stat-label">Ratio V/D</span>
-            </div>
-          </div>
           <div className="experience-bar-container">
             <div className="experience-bar">
               <div 

@@ -2,6 +2,8 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 3rem 2rem;
+  position: relative;
+  z-index: 1;
 }
 
 .profile-header {
@@ -11,6 +13,7 @@
   margin-bottom: 2rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(255, 215, 0, 0.1);
+  position: relative;
 }
 
 .profile-banner {
@@ -22,6 +25,7 @@
   justify-content: flex-end;
   align-items: center;
   padding: 2rem;
+  z-index: 2;
 }
 
 .profile-banner::after {
@@ -76,6 +80,8 @@
   padding: 70px 3rem 2.5rem;
   margin-left: 260px;
   width: calc(100% - 260px);
+  position: relative;
+  z-index: 1;
 }
 
 .profile-info-header h1 {
@@ -178,6 +184,7 @@
   background: var(--gradient-gold);
   transition: width 0.3s ease;
   position: relative;
+  z-index: 1;
 }
 
 .profile-stat-fill.increasing::after {
@@ -328,6 +335,9 @@
   padding: 0.5rem;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 12px;
+  position: relative;
+  z-index: 3;
+  margin-bottom: 2rem;
 }
 
 .experience-bar {
@@ -349,6 +359,7 @@
   transition: width 0.3s ease;
   position: relative;
   overflow: hidden;
+  z-index: 1;
 }
 
 .experience-fill::after {
@@ -377,6 +388,8 @@
   font-weight: bold;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
   white-space: nowrap;
+  z-index: 4;
+  pointer-events: none;
 }
 
 @keyframes shimmer {
@@ -521,8 +534,10 @@
   padding: 1.5rem;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 8px;
-  margin-bottom: 2rem;
+  margin-top: 2rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  z-index: 2;
 }
 
 .profile-battle-stats .battle-stat {
@@ -580,6 +595,8 @@
   display: flex;
   gap: 2rem;
   margin-right: 2rem;
+  position: relative;
+  z-index: 3;
 }
 
 .banner-stat {
@@ -590,6 +607,15 @@
   border-radius: 12px;
   border: 1px solid rgba(255, 215, 0, 0.2);
   backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+  min-width: 140px;
+}
+
+.banner-stat:hover {
+  transform: translateY(-2px);
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 215, 0, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 .banner-stat-value {
@@ -597,10 +623,12 @@
   font-weight: bold;
   color: var(--color-accent);
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  margin-bottom: 0.5rem;
 }
 
 .banner-stat-label {
   font-size: 0.9rem;
-  opacity: 0.8;
+  opacity: 0.9;
   margin-top: 0.5rem;
+  color: #FFD700;
 } 
