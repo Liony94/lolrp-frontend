@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import api from "../../services/api";
+import { getProfileImageUrl, handleImageError } from '../../utils/imageUtils';
 import "./Combat.styles.css";
 
 import OpponentSelection from "./components/OpponentSelection";
@@ -54,7 +55,9 @@ const Combat = () => {
           username: opponent.username,
           level: Math.floor((opponent.attaque + opponent.defense + opponent.puissance + opponent.esquive) / 40),
           region: opponent.region?.name || "Sans région",
-          avatar: opponent.profileImage || "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Garen_0.jpg",
+          profileImage: opponent.profileImage || null,
+          battlePower: opponent.battlePower,
+          victories: opponent.victories,
           stats: {
             attaque: opponent.attaque,
             defense: opponent.defense,

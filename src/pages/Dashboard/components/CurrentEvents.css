@@ -1,0 +1,74 @@
+.current-events {
+  padding: 1rem;
+}
+
+.events-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.event-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-2px);
+}
+
+.event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.time-remaining {
+  color: #FFD700;
+  font-weight: bold;
+}
+
+.event-progress {
+  margin: 1rem 0;
+}
+
+.progress-bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.world_event .progress-fill {
+  background: linear-gradient(90deg, #ff4d4d, #ff9999);
+}
+
+.seasonal_event .progress-fill {
+  background: linear-gradient(90deg, #4d4dff, #9999ff);
+}
+
+.pvp_event .progress-fill {
+  background: linear-gradient(90deg, #4dff4d, #99ff99);
+}
+
+.participate-button {
+  width: 100%;
+  padding: 0.75rem;
+  background: #4CAF50;
+  border: none;
+  border-radius: 0.25rem;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.participate-button:hover {
+  background: #45a049;
+} 

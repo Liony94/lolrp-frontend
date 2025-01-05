@@ -1,0 +1,75 @@
+.achievements-container {
+  padding: 1rem;
+}
+
+.achievements-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.achievement-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.achievement-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: #666;
+  transition: background 0.3s ease;
+}
+
+.achievement-card.completed::before {
+  background: #4CAF50;
+}
+
+.achievement-info h3 {
+  margin: 0 0 0.5rem 0;
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.achievement-info p {
+  color: #aaa;
+  font-size: 0.9rem;
+  margin: 0 0 1rem 0;
+}
+
+.achievement-progress {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4CAF50, #8BC34A);
+  transition: width 0.3s ease;
+}
+
+.achievement-card.completed .progress-fill {
+  background: linear-gradient(90deg, #FFD700, #FFA500);
+}
+
+.achievement-progress span {
+  font-size: 0.9rem;
+  color: #aaa;
+  min-width: 60px;
+  text-align: right;
+} 

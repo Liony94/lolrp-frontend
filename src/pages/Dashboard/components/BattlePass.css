@@ -1,0 +1,63 @@
+.battle-pass {
+  padding: 1rem;
+}
+
+.battle-pass-header {
+  margin-bottom: 1.5rem;
+}
+
+.season-progress {
+  margin-top: 1rem;
+}
+
+.progress-track {
+  background: rgba(255, 255, 255, 0.1);
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  background: linear-gradient(90deg, #FFD700, #FFA500);
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.rewards-track {
+  display: grid;
+  gap: 1rem;
+}
+
+.reward-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.reward-item:hover {
+  transform: translateY(-2px);
+}
+
+.reward-item.claimed {
+  opacity: 0.7;
+}
+
+.reward-item.available {
+  border: 1px solid #FFD700;
+}
+
+.claim-button {
+  padding: 0.5rem 1rem;
+  background: #FFD700;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.claim-button:hover {
+  background: #FFA500;
+} 

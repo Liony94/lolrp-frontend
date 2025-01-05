@@ -1,0 +1,244 @@
+.arena-preview {
+  color: white;
+  padding: 1rem;
+}
+
+.champion-showcase {
+  margin-bottom: 2rem;
+}
+
+.champion-banner {
+  background: linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(42, 42, 42, 0.9) 100%);
+  border-radius: 1rem;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 2rem;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.champion-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(50, 50, 50, 0.3));
+  opacity: 0.1;
+  z-index: 0;
+}
+
+.champion-medal {
+  position: relative;
+  z-index: 1;
+}
+
+.rank-medal {
+  width: 120px;
+  height: 120px;
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+  animation: float 3s ease-in-out infinite;
+}
+
+.champion-info {
+  position: relative;
+  z-index: 1;
+}
+
+.champion-titles h2 {
+  margin: 0;
+  font-size: 2.5rem;
+  background: linear-gradient(45deg, #FFD700, #FFA500);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.champion-title {
+  font-size: 1.2rem;
+  color: #aaa;
+  display: block;
+  margin-top: 0.5rem;
+}
+
+.champion-stats {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #FFD700;
+  display: block;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+.champion-challenge {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.reward-info {
+  margin-bottom: 1rem;
+}
+
+.reward-label {
+  display: block;
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-bottom: 0.5rem;
+}
+
+.reward-value {
+  font-size: 1.2rem;
+  color: #FFD700;
+  font-weight: bold;
+}
+
+.challenge-champion-btn {
+  background: linear-gradient(45deg, #ff4d4d, #ff9999);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.challenge-champion-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(255, 77, 77, 0.4);
+}
+
+.challengers-section {
+  margin-top: 2rem;
+}
+
+.challengers-section h3 {
+  margin-bottom: 1rem;
+  color: #aaa;
+}
+
+.challengers-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.challenger-card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.challenger-card:hover {
+  transform: translateX(10px);
+}
+
+.challenger-rank {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #FFD700;
+}
+
+.challenger-info {
+  flex: 1;
+}
+
+.challenger-name {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.challenger-stats {
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+@media (max-width: 1024px) {
+  .champion-banner {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .champion-medal {
+    margin: 0 auto;
+  }
+
+  .champion-stats {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .champion-titles h2 {
+    font-size: 2rem;
+  }
+
+  .stat-value {
+    font-size: 1.2rem;
+  }
+}
+
+.champion-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #FFD700;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+  display: block;
+  max-width: 100%;
+}
+
+.default-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  font-weight: bold;
+  color: #FFD700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+}
+
+.default-avatar span {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+} 

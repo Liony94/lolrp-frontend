@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import api from '../../services/api';
+import { getProfileImageUrl, handleImageError } from '../../utils/imageUtils';
 import './Profile.styles.css';
 
 const Profile = () => {
@@ -87,9 +88,13 @@ const Profile = () => {
         <div className="profile-banner">
           <div className="profile-avatar-container">
             <img 
-              src="https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Garen_0.jpg" 
-              alt="Avatar" 
+              src={getProfileImageUrl(userStats?.profileImage)}
+              alt={`Avatar de ${user?.username}`}
               className="profile-avatar"
+              onError={(e) => handleImageError(e, user?.username)}
+              loading="lazy"
+              crossOrigin="anonymous"
+              referrerPolicy="no-referrer"
             />
             <div className="profile-level">
               <span>{userStats?.niveau || "Niveau"}</span>
