@@ -16,11 +16,13 @@
   background: var(--gradient-dark);
   padding: 2rem;
   border-radius: 12px;
-  border: 2px solid var(--color-primary);
+  border: 2px solid rgba(255, 215, 0, 0.3);
   max-width: 500px;
   width: 90%;
   text-align: center;
   animation: modalAppear 0.3s ease-out;
+  background: linear-gradient(145deg, rgba(26, 26, 26, 0.95), rgba(42, 42, 42, 0.95));
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 .modal-content h2 {
@@ -32,27 +34,90 @@
   margin: 2rem 0;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem;
+  gap: 2rem;
+  padding: 1.5rem;
   background: rgba(0, 0, 0, 0.3);
   border-radius: 8px;
 }
 
+.opponent-preview-avatar-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .opponent-preview-avatar {
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
+  position: relative;
+  z-index: 2;
   object-fit: cover;
-  border: 2px solid var(--color-primary);
+}
+
+.opponent-preview-frame {
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #FFD700, #FFA500);
+  z-index: 1;
+  opacity: 0.8;
+}
+
+.opponent-preview-level {
+  position: absolute;
+  bottom: -8px;
+  right: -8px;
+  background: #1a1a1a;
+  color: #FFD700;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  border: 2px solid #FFD700;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+  z-index: 3;
 }
 
 .opponent-preview-stats {
   text-align: left;
+  flex: 1;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.preview-stat-group {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .preview-stat {
-  margin: 0.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  font-weight: bold;
   color: var(--color-text);
+}
+
+.preview-region {
+  display: inline-block;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.3rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  border: 1px solid var(--color-primary);
 }
 
 .modal-actions {
@@ -64,16 +129,20 @@
 
 .modal-button {
   padding: 0.8rem 1.5rem;
-  border-radius: 6px;
+  border-radius: 25px;
   border: none;
   cursor: pointer;
   font-weight: bold;
   transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 1.1rem;
 }
 
 .modal-button.confirm {
-  background: var(--gradient-gold);
+  background: linear-gradient(45deg, #FFD700, #FFA500);
   color: var(--color-background);
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
 }
 
 .modal-button.cancel {
@@ -83,7 +152,8 @@
 
 .modal-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+  background: linear-gradient(45deg, #FFA500, #FFD700);
 }
 
 @keyframes modalAppear {
